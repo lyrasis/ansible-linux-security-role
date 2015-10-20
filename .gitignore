@@ -1,0 +1,15 @@
+inventory/
+backups/
+Berksfile.lock
+*~
+*#
+.#*
+\#*#
+.*.sw[a-z]
+*.un~
+*.save
+keys/
+inventory/new
+inventory/all
+.vagrant/
+
