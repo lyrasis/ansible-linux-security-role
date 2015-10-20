@@ -19,7 +19,7 @@ None.
 Role Variables
 --------------
 
-Many
+lynis_version: the current version of lynis used to grab the tar file from cisofy.com
 
 Dependencies
 ------------
