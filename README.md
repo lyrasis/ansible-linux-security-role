@@ -7,6 +7,7 @@ This role will install a number of security auditing and monitoring tools for Li
 -Linux Malware Detect ( https://www.rfxn.com/projects/linux-malware-detect/ )
 -Lynis ( https://cisofy.com/lynis/ )
 -LSAT ( http://usat.sourceforge.net/ )
+-tiger
 
 Requirements
 ------------
