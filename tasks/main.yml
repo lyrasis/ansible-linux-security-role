@@ -1,6 +1,9 @@
 ---
 # tasks file for ansible-linux-security-role
-      
+# Linux Malware Detect isn't available as a package
+# Lynis updates often and package tends to be behind
+# everything else is apt-get installed.
+
   - name: make sure the time is correct
     shell: "ntpdate -u pool.ntp.org"
 
@@ -13,73 +16,51 @@
       state: latest
     with_items:
       - chkrootkit
+      - lsat
       - nmap
       - rkhunter
+      - tiger
       - zip
 
-  - name: Make sure rkhunter has latest defs
+  - name: rkhunter | Make sure rkhunter has latest defs
     command: rkhunter --propupd
 
   - name: Create root's download dir
     file: path=/root/downloads state=directory
     file: path=/root/downloads/maldet state=directory
-    tags: maldet
+    file: path=/root/downloads/lynis state=directory
  
-  - name: download the Linux Malware Detect tar.gz file from rfxn.com
+  - name: Maldet | download the Linux Malware Detect tar.gz file from rfxn.com
     get_url:
       url=http://www.rfxn.com/downloads/maldetect-current.tar.gz
       dest="/root/downloads/maldetect-current.tar.gz"
     tags: maldet
 
-  - name: Untar Linux Malware Detect tar.gz
+  - name: Maldet | Untar Linux Malware Detect tar.gz
     command: mkdir /root/downloads/maldet/ 
     ignore_errors: yes
     tags: maldet
 
-  - name: Untar Linux Malware Detect tar.gz
+  - name: Maldet | Untar Linux Malware Detect tar.gz
     command: tar xvfz /root/downloads/maldetect-current.tar.gz -C /root/downloads/maldet/ --strip-components 1
     tags: maldet
 
-  - name: Install Linux Malware Detect
+  - name: Maldet | Install Linux Malware Detect
     shell: /root/downloads/maldet/install.sh chdir=/root/downloads/maldet/
     tags: maldet
 
-  - name: Grab the latest Lynis
-    get_url: url=https://cisofy.com/files/{{ lynis }} dest=/root/downloads
+  - name: Lynis | Grab the latest Lynis
+    get_url: url=https://cisofy.com/files/{{ lynis_version }} dest=/root/downloads
     tags: lynis
 
-  - name: Make lynis dir
-    command: mkdir /root/downloads/lynis/ 
-    ignore_errors: yes
+  - name: Lynis | Unarchive copied package
+    unarchive: src=/root/downloads/{{ lynis }} dest=/root/downloads/lynis/ copy=yes
     tags: lynis
 
-  - name: Extract Lynis
-    command: tar zxfv /root/downloads/{{ lynis }} -C /root/downloads/lynis/ --strip-components 1
-    tags: lynis
-
-  - name: Now install Lynis
+  - name: Lynis | Install Lynis
     command: mv /root/downloads/lynis /etc/lynis chdir=/root/downloads/lynis creates=/etc/lynis
     tags: lynis
 
-
-#######################
-## maybe a better way to do lynis:
-
-- name: Lynis | Create /usr/local/lynis
-file: path=/usr/local/lynis state=directory
-
-- name: Lynis | Unarchive copied package
-unarchive: src=/etc/ansible/files/packages/lynis-latest.tar.gz dest=/usr/local copy=yes
-register: result
-
-- name: Lynis | Copy default Lynis profile from master to destination
-copy: src=/etc/ansible/files/configs/lynis_custom.prf dest=/usr/local/lynis/custom.prf force=yes
-when: result.changed == True
-
-- name: Lynis | Add Lynis to crontab if package files still exists (normally ran once)
-cron: name="Run Lynis" hour="{{ 4|random}}" minute="{{ 59 |random}}" job="/usr/local/lynis/lynis -c --cronjob --upload --profile /usr/local/lynis/custom.prf" state=present
-when: result.changed == True
-
-- name: Lynis | Delete Lynis tarball
-file: path=/usr/local/lynis-latest.tar.gz state=absent
-#when: result.changed == True
+  - name: Lynis | Add Lynis to crontab
+    cron: name="Run Lynis" hour="{{ 4|random}}" minute="{{ 59 |random}}" job="/usr/local/lynis/lynis -c --cronjob --upload --profile /usr/local/lynis/custom.prf" state=present
+    tags: lynis
