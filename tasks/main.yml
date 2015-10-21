@@ -49,12 +49,16 @@
     shell: /root/downloads/maldet/install.sh chdir=/root/downloads/maldet/
     tags: maldet
 
+  - name: Maldet | Add maldet to crontab
+    cron: name="Run Maldet" hour="{{ 3|random}}" minute="{{ 57 |random}}" job="{{ maldet_cron }}" state=present
+    tags: lynis
+
   - name: Lynis | Grab the latest Lynis
     get_url: url=https://cisofy.com/files/{{ lynis_version }} dest=/root/downloads
     tags: lynis
 
   - name: Lynis | Unarchive copied package
-    unarchive: src=/root/downloads/{{ lynis }} dest=/root/downloads/lynis/ copy=yes
+    unarchive: src=/root/downloads/{{ lynis_version }} dest=/root/downloads/lynis/ copy=yes
     tags: lynis
 
   - name: Lynis | Install Lynis
@@ -62,5 +66,5 @@
     tags: lynis
 
   - name: Lynis | Add Lynis to crontab
-    cron: name="Run Lynis" hour="{{ 4|random}}" minute="{{ 59 |random}}" job="/usr/local/lynis/lynis -c --cronjob --upload --profile /usr/local/lynis/custom.prf" state=present
+    cron: name="Run Lynis" hour="{{ 4|random}}" minute="{{ 59 |random}}" job="{{ lynis_cron }}" state=present
     tags: lynis
