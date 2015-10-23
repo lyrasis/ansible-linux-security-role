@@ -24,6 +24,14 @@ lynis_cron: what lynis is going to run e.g. ( /usr/local/lynis/lynis -c --cronjo
 maldet_cron: what to run e.g. (/usr/local/maldetect/maldet -b -r /home?/?/public_html/,/var/www/html/,/usr/local/apache/htdocs/ 1 >> /dev/null 2>&1)
 ```
 
+Role Tags
+--------------
+```
+lynis: to install lynis
+maldet: to install maldet
+cron: adds lynis and maldet to cron
+```
+
 Dependencies
 ------------
 
