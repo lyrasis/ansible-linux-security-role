@@ -52,6 +52,7 @@
   - name: Maldet | Add maldet to crontab
     cron: name="Run Maldet" hour="{{ 3|random}}" minute="{{ 57 |random}}" job="{{ maldet_cron }}" state=present
     tags: lynis
+    tags: cron
 
   - name: Lynis | Grab the latest Lynis
     get_url: url=https://cisofy.com/files/{{ lynis_version }} dest=/root/downloads
@@ -68,3 +69,4 @@
   - name: Lynis | Add Lynis to crontab
     cron: name="Run Lynis" hour="{{ 4|random}}" minute="{{ 59 |random}}" job="{{ lynis_cron }}" state=present
     tags: lynis
+    tags: cron
