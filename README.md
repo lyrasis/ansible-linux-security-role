@@ -18,10 +18,11 @@ None.
 
 Role Variables
 --------------
-
+```
 lynis_version: the current version of lynis used to grab the tar file from cisofy.com full name of the file, no path
 lynis_cron: what lynis is going to run e.g. ( /usr/local/lynis/lynis -c --cronjob --upload --profile /usr/local/lynis/custom.prf)
 maldet_cron: what to run e.g. (/usr/local/maldetect/maldet -b -r /home?/?/public_html/,/var/www/html/,/usr/local/apache/htdocs/ 1 >> /dev/null 2>&1)
+```
 
 Dependencies
 ------------
