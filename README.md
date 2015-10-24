@@ -50,6 +50,14 @@ Example Playbook
   vars_files:
     - group_vars/security
 ```
+Your `group_vars/security` file would look something like this:
+```
+---
+lynis_version: lynis-2.1.1.tar.gz
+lynis_cron: /usr/local/lynis/lynis -c --cronjob --upload --profile /usr/local/lynis/custom.prf
+maldet_cron: /usr/local/maldetect/maldet -b -r /path/to/scan/here/ 1 >> /dev/null 2>&1
+```
+
 and then run from CLI. e.g. to install Lynis on your dev-server
 ```
 $ ansible-playbook -i inventory.py -e ansible_ssh_port=2222 -u secureuser -K ./security.yml --limit=dev-server --tags=lynis
