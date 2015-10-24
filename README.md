@@ -39,13 +39,21 @@ None
 
 Example Playbook
 ----------------
-
-Doesn't exsist yet, will soon :-)
-This is totally NOT WORKING AT ALL YET!!!!
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
+```
+---
+- name: ansible-linux-security-role
+  hosts: all
+  user: secureuser
+  sudo: yes
+  roles:
+    - ansible-linux-security-role
+  vars_files:
+    - group_vars/security
+```
+and then run from CLI. e.g. to install Lynis on your dev-server
+```
+$ ansible-playbook -i inventory.py -e ansible_ssh_port=2222 -u secureuser -K ./security.yml --limit=dev-server --tags=lynis
+```
 License
 -------
 
