@@ -9,6 +9,7 @@
 
   - name: Update APT package cache
     action: apt update_cache=yes
+    changed_when: False
 
   - name: install packages
     apt:
@@ -24,10 +25,10 @@
 
   - name: rkhunter | Make sure rkhunter has latest defs
     command: rkhunter --propupd
+    changed_when: False
 
   - name: Create root's download dir
-    file: path=/root/downloads/maldet state=directory
-    file: path=/root/downloads/lynis state=directory
+    file: path=/root/downloads state=directory
  
   - name: Maldet | download the Linux Malware Detect tar.gz file from rfxn.com
     get_url:
@@ -35,39 +36,42 @@
       dest="/root/downloads/maldetect-current.tar.gz"
     tags: maldet
 
-  - name: Maldet | Untar Linux Malware Detect tar.gz
-    command: mkdir /root/downloads/maldet/ 
-    ignore_errors: yes
-    tags: maldet
-
-  - name: Maldet | Untar Linux Malware Detect tar.gz
-    command: tar xvfz /root/downloads/maldetect-current.tar.gz -C /root/downloads/maldet/ --strip-components 1
+  - name: Lynis | Unarchive copied package
+    unarchive: src=/root/downloads/maldetect-current.tar.gz creates=/root/downloads/maldet dest=/root/downloads/maldet copy=no
     tags: maldet
 
   - name: Maldet | Install Linux Malware Detect
     shell: /root/downloads/maldet/install.sh chdir=/root/downloads/maldet/
+    changed_when: False
     tags: maldet
 
-  - name: Maldet | Add maldet to crontab
+  - name: Maldet | Add maldet to crontab at a random hour
     cron: name="Run Maldet" hour="{{ 3|random}}" minute="{{ 57 |random}}" job="{{ maldet_cron }}" state=present
+    changed_when: False
     tags: 
-       - lynis
+       - maldet
        - cron
+
+  - name: Lynis | Create Lynis's download dir
+    file: path=/root/downloads/lynis state=directory
+    tags: lynis
 
   - name: Lynis | Grab the latest Lynis
     get_url: url=https://cisofy.com/files/{{ lynis_version }} dest=/root/downloads
     tags: lynis
 
   - name: Lynis | Unarchive copied package
-    unarchive: src=/root/downloads/{{ lynis_version }} dest=/root/downloads/lynis/ copy=yes
+    unarchive: src=/root/downloads/{{ lynis_version }} creates=/root/downloads/lynis dest=/root/downloads/lynis copy=no
     tags: lynis
 
   - name: Lynis | Install Lynis
     command: mv /root/downloads/lynis /etc/lynis chdir=/root/downloads/lynis creates=/etc/lynis
     tags: lynis
 
-  - name: Lynis | Add Lynis to crontab
+  - name: Lynis | Add Lynis to crontab at a random hour
     cron: name="Run Lynis" hour="{{ 4|random}}" minute="{{ 59 |random}}" job="{{ lynis_cron }}" state=present
+    changed_when: False
     tags: 
        - lynis
        - cron
+
