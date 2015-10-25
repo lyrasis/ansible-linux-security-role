@@ -16,12 +16,20 @@
       pkg: "{{ item }}"
       state: latest
     with_items:
+      - zip
+    tags: bootstrap
+
+  - name: install packages
+    apt:
+      pkg: "{{ item }}"
+      state: latest
+    with_items:
       - chkrootkit
       - lsat
       - nmap
       - rkhunter
       - tiger
-      - zip
+    tags: scanners
 
   - name: rkhunter | Make sure rkhunter has latest defs
     command: rkhunter --propupd
