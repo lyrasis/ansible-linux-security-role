@@ -27,9 +27,11 @@ maldet_cron: what to run e.g. (/usr/local/maldetect/maldet -b -r /home?/?/public
 Role Tags
 --------------
 ```
+scanners: all scanner installs are tagged with scanners
 lynis: to install lynis
 maldet: to install maldet
 cron: adds lynis and maldet to cron
+remove: will remove everything installed
 ```
 
 Dependencies
