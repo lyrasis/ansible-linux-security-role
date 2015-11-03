@@ -1,9 +1,5 @@
 ---
-# tasks file for ansible-linux-security-role
-# Linux Malware Detect isn't available as a package
-# Lynis updates often and package tends to be behind
-# everything else is apt-get installed.
-
+# Removal tasks file for ansible-linux-security-role
 
   - name: Remove checkrootkit, lsat, rkhunter, tiger and nmap
     apt:

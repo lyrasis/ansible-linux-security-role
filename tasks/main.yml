@@ -1,8 +1,5 @@
 ---
 # tasks file for ansible-linux-security-role
-# Linux Malware Detect isn't available as a package
-# Lynis updates often and package tends to be behind
-# everything else is apt-get installed.
 
   - name: make sure the time is correct
     shell: "ntpdate -u pool.ntp.org"
@@ -11,85 +8,7 @@
     action: apt update_cache=yes
     changed_when: False
 
-  - name: install packages
-    apt:
-      pkg: "{{ item }}"
-      state: latest
-    with_items:
-      - zip
-      - nmap
-    tags: bootstrap
+  - include: install.yml
 
-  - name: install packages
-    apt:
-      pkg: "{{ item }}"
-      state: latest
-    with_items:
-      - chkrootkit
-      - lsat
-      - rkhunter
-      - tiger
-    tags: scanners
+  - include: tasks.yml
 
-  - name: rkhunter | Make sure rkhunter has latest defs
-    command: rkhunter --propupd
-    changed_when: False
-    tags: scanners
-
-  - name: Create root's download dir
-    file: path=/root/downloads state=directory
-    tags: bootstrap
- 
-  - name: Maldet | download the Linux Malware Detect tar.gz file from rfxn.com
-    get_url:
-      url=http://www.rfxn.com/downloads/maldetect-current.tar.gz
-      dest="/root/downloads/maldetect-current.tar.gz"
-    tags: maldet
-    tags: scanners
-
-  - name: Lynis | Unarchive copied package
-    unarchive: src=/root/downloads/maldetect-current.tar.gz creates=/root/downloads/maldet dest=/root/downloads/maldet copy=no
-    tags: maldet
-    tags: scanners
-
-  - name: Maldet | Install Linux Malware Detect
-    shell: /root/downloads/maldet/install.sh chdir=/root/downloads/maldet/
-    changed_when: False
-    tags: maldet
-    tags: scanners
-
-  - name: Maldet | Add maldet to crontab at a random hour
-    cron: name="Run Maldet" hour="{{ 3|random}}" minute="{{ 57 |random}}" job="{{ maldet_cron }}" state=present
-    changed_when: False
-    tags: 
-       - maldet
-       - cron
-       - scanners
-
-  - name: Lynis | Create Lynis's download dir
-    file: path=/root/downloads/lynis state=directory
-    tags: lynis
-    tags: scanners
-
-  - name: Lynis | Grab the latest Lynis
-    get_url: url=https://cisofy.com/files/{{ lynis_version }} dest=/root/downloads
-    tags: lynis
-    tags: scanners
-
-  - name: Lynis | Unarchive copied package
-    unarchive: src=/root/downloads/{{ lynis_version }} creates=/root/downloads/lynis dest=/root/downloads/lynis copy=no
-    tags: lynis
-    tags: scanners
-
-  - name: Lynis | Install Lynis
-    command: mv /root/downloads/lynis /etc/lynis chdir=/root/downloads/lynis creates=/etc/lynis
-    tags: lynis
-    tags: scanners
-
-  - name: Lynis | Add Lynis to crontab at a random hour
-    cron: name="Run Lynis" hour="{{ 4|random}}" minute="{{ 59 |random}}" job="{{ lynis_cron }}" state=present
-    changed_when: False
-    tags: 
-       - lynis
-       - cron
-       - scanners
