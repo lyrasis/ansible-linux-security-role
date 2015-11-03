@@ -1,0 +1,41 @@
+---
+# tasks file for ansible-linux-security-role
+# Linux Malware Detect isn't available as a package
+# Lynis updates often and package tends to be behind
+# everything else is apt-get installed.
+
+
+  - name: Remove checkrootkit, lsat, rkhunter, tiger and nmap
+    apt:
+      pkg: "{{ item }}"
+      state: absent
+      purge: yes
+    with_items:
+      - chkrootkit
+      - lsat
+      - rkhunter
+      - tiger
+      - nmap
+    tags: remove
+
+
+  - name: Maldet | Remove Linux Malware Detect
+    shell: /root/downloads/maldet/uninstall.sh chdir=/root/downloads/maldet/
+    tags: remove
+
+  - name: Maldet | Remove Maldet crontab
+    cron: name="Run Maldet" hour="{{ 3|random}}" minute="{{ 57 |random}}" job="{{ maldet_cron }}" state=absent
+    changed_when: False
+    tags: remove
+
+  - name: Lynis | Remove Lynis
+    file: path=/etc/lynis state=absent
+    tags: remove
+
+  - name: Lynis | Remove Lynis crontab
+    cron: name="Run Lynis" hour="{{ 4|random}}" minute="{{ 59 |random}}" job="{{ lynis_cron }}" state=absent
+    tags: remove
+
+  - name: remove root's download dir
+    file: path=/root/downloads state=absent
+    tags: remove
