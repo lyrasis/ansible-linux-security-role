@@ -56,6 +56,7 @@
     shell: /root/downloads/maldet/install.sh chdir=/root/downloads/maldet/
     changed_when: False
     tags: maldet
+    tags: scanners
 
   - name: Maldet | Add maldet to crontab at a random hour
     cron: name="Run Maldet" hour="{{ 3|random}}" minute="{{ 57 |random}}" job="{{ maldet_cron }}" state=present
@@ -73,6 +74,7 @@
   - name: Lynis | Grab the latest Lynis
     get_url: url=https://cisofy.com/files/{{ lynis_version }} dest=/root/downloads
     tags: lynis
+    tags: scanners
 
   - name: Lynis | Unarchive copied package
     unarchive: src=/root/downloads/{{ lynis_version }} creates=/root/downloads/lynis dest=/root/downloads/lynis copy=no
