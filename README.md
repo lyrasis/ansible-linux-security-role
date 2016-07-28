@@ -64,12 +64,15 @@ and then run from CLI. e.g. to install Lynis on your dev-server
 ```
 $ ansible-playbook -i inventory.py -e ansible_ssh_port=2222 -u secureuser -K ./security.yml --limit=dev-server --tags=lynis
 ```
-License
--------
-
-BSD
 
 Author Information
 ------------------
 
 Blake Carver
+
+License
+---
+
+The project is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+
+---
