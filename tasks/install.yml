@@ -40,7 +40,7 @@
     tags: maldet
     tags: scanners
 
-  - name: Lynis | Unarchive copied package
+  - name: Maldet | Unarchive copied package
     unarchive: src=/root/downloads/maldetect-current.tar.gz creates=/root/downloads/maldet dest=/root/downloads/maldet copy=no
     tags: maldet
     tags: scanners
