@@ -10,5 +10,3 @@
 
   - include: install.yml
 
-  - include: tasks.yml
-
