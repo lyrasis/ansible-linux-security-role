@@ -89,7 +89,7 @@
   - name: Lynis | Unarchive copied package
     unarchive: 
       src: /root/downloads/{{ lynis_version }} 
-      dest: /root/downloads/lynis 
+      dest: /root/downloads
       copy: no
     tags: 
       - lynis
