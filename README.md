@@ -55,7 +55,7 @@ Example Playbook
 Your `group_vars/security` file would look something like this:
 ```
 ---
-lynis_version: lynis-2.1.1.tar.gz
+lynis_version: lynis_version: lynis-2.5.3.tar.gz
 lynis_cron: /usr/local/lynis/lynis -c --cronjob --upload --profile /usr/local/lynis/custom.prf
 maldet_cron: /usr/local/maldetect/maldet -b -r /path/to/scan/here/ 1 >> /dev/null 2>&1
 ```
