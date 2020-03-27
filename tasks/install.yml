@@ -6,21 +6,19 @@
 
   - name: install packages
     apt:
-      pkg: "{{ item }}"
+      pkg: 
+        - zip
+        - nmap
       state: latest
-    with_items:
-      - zip
-      - nmap
     tags: bootstrap
 
   - name: install packages
     apt:
       pkg: "{{ item }}"
+        - chkrootkit
+        - rkhunter
+        - tiger
       state: latest
-    with_items:
-      - chkrootkit
-      - rkhunter
-      - tiger
     tags: scanners
 
   - name: rkhunter | Make sure rkhunter has latest defs
