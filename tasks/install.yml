@@ -14,7 +14,7 @@
 
   - name: install packages
     apt:
-      pkg: "{{ item }}"
+      pkg:
         - chkrootkit
         - rkhunter
         - tiger
