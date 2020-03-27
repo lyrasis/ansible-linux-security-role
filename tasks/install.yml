@@ -93,7 +93,7 @@
       - scanners
 
   - name: Lynis | Install Lynis
-    command: mv /root/downloads/lynis /usr/local/lynis chdir=/root/downloads/lynis creates=/usr/local/lynis
+    command: mv /root/downloads/lynis /usr/local/lynis creates=/usr/local/lynis
     tags:
       - lynis
       - scanners
