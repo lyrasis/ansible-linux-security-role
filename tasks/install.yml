@@ -19,7 +19,6 @@
       state: latest
     with_items:
       - chkrootkit
-      - lsat
       - rkhunter
       - tiger
     tags: scanners
