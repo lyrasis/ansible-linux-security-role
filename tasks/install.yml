@@ -77,7 +77,7 @@
 
   - name: Lynis | Grab the latest Lynis
     get_url: 
-      url: https://cisofy.com/files/{{ lynis_version }} 
+      url: https://downloads.cisofy.com/lynis/lynis-{{ lynis_version }}.tar.gz
       dest: /root/downloads
     tags: 
       - lynis
